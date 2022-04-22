@@ -46,10 +46,10 @@ void ll_add_nth_node(linked_list_t* list, unsigned int n, void *new_data, void *
     new_node = malloc(sizeof(*new_node));
     new_node->data = malloc(list->data_size);
     memcpy(new_node->data, new_data, list->data_size);
-    if (details) {
+    if (details) {  // check if there are any details to assign to node
         new_node->details = malloc(list->details_size);
         memcpy(new_node->details, details, list->details_size);
-    } else {
+    } else {  // definitions dictionary doesn't need details
         new_node->details = NULL; //TODO check if there is any other case
     }
 

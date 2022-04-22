@@ -8,6 +8,7 @@
 #include "structures.h"
 #include "utils.h"
 #include "books_utils.h"
+#include "definitions_utils.h"
 
 #define HMAX 10  // standard number of buckets
 #define B_MAX 40  // maximum nr of characters in a book name
@@ -39,7 +40,12 @@ int main(void) {
             fgets(line, BUF, stdin);
             get_book_name(line, book_name);
             sscanf(line + strlen(book_name) + 4, "%s%s", key_name, value_name);
-            
+            add_definition(books_ht, book_name, key_name, value_name);
+        } else if (strcmp(command, "GET_DEF") == 0) {
+            fgets(line, BUF, stdin);
+            get_book_name(line, book_name);
+            sscanf(line + strlen(book_name) + 4, "%s", key_name);
+            get_definition(books_ht, book_name, key_name);
         }
     }
 }
