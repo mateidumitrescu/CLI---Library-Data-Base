@@ -12,6 +12,9 @@
 #define KV_MAX 20
 #define C_MAX 10
 #define BUF 125
+#define DEFINITIONS "definitions"  // Macros for dictionary types
+#define BOOKS "books"  // Macros for dictionary types
+#define USERS "users"  // Macros for dictionary types
 
 void add_definition(hashtable_t *books_ht, char book_name[B_MAX],
                     char key_name[KV_MAX], char value_name[KV_MAX]) {
@@ -35,7 +38,20 @@ void get_definition(hashtable_t *books_ht, char book_name[B_MAX], char key_name[
             printf("The definition is not in the book.\n");
         }
     } else {
-        printf("The book is not in the library\n");
+        printf("The book is not in the library.\n");
+    }
+}
+
+void remove_definition(hashtable_t *books_ht, char book_name[B_MAX], char key_name[KV_MAX]) {
+    if (ht_has_key(books_ht, book_name)) {
+        hashtable_t *definitions_ht = (hashtable_t *)ht_get(books_ht, book_name);
+        if (ht_has_key(definitions_ht, key_name)) {
+            ht_remove_entry(definitions_ht, key_name, DEFINITIONS);
+        } else {
+            printf("The definition is not in the book.\n");
+        }
+    } else {
+        printf("The book is not in the library.\n");
     }
 }
 

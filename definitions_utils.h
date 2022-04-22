@@ -17,4 +17,7 @@ void add_definition(hashtable_t *books_ht, char book_name[B_MAX],
 void get_definition(hashtable_t *books_ht, char book_name[B_MAX],
                     char key_name[KV_MAX]);
 
+// function to remove a definition from a book
+void remove_definition(hashtable_t *books_ht, char book_name[B_MAX], char key_name[KV_MAX]);
+
 #endif  // DEFINITIONS_UTILS_H_

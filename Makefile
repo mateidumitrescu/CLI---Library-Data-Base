@@ -1,5 +1,5 @@
 build:
-	gcc -g -Wall -Wextra main.c utils.c hashtable_utils.c books_utils.c definitions_utils.c -o main
+	gcc -g -Wall -Wextra main.c utils.c hashtable_utils.c books_utils.c definitions_utils.c users_utils.c -o main
 
 run:
 	./main

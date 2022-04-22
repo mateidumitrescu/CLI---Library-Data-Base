@@ -40,6 +40,8 @@ typedef struct book_info_t {
 typedef struct user_info_t {
     int points;
     int banned;
+    int borrow_period;
+    int return_period;
 } user_info_t;
 
 #endif  // STRUCTURES_H_
