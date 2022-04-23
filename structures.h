@@ -3,6 +3,9 @@
 #ifndef STRUCTURES_H_
 #define STRUCTURES_H_
 
+#define B_MAX 40
+#define U_MAX 20
+
 typedef struct ll_node_t
 {
     void *data;
@@ -47,7 +50,12 @@ typedef struct user_info_t {
 typedef struct book_ranking_t {
     double rating;
     int purchases;
-    char *name;
+    char name[B_MAX];
 } book_ranking_t;
+
+typedef struct user_ranking_t {
+    char name[U_MAX];
+    int points;
+} user_ranking_t;
 
 #endif  // STRUCTURES_H_

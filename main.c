@@ -82,6 +82,8 @@ int main(void) {
             report_lost(books_ht, users_ht, user_name, book_name);
         } else if (strcmp(command, "EXIT") == 0) {
             day_is_over(books_ht, users_ht);
+            go = 0;
         }
     }
+    return 0;
 }

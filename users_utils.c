@@ -6,6 +6,7 @@
 
 #include "structures.h"
 #include "hashtable_utils.h"
+#include "books_utils.h"
 
 #define U_MAX 20
 #define B_MAX 40
@@ -46,7 +47,6 @@ void borrow_book(hashtable_t *users_ht, hashtable_t *books_ht, char user_name[U_
                 user->has_borrowed = 1;
                 user->borrow_period = borrow_days;
                 book->borrowed = 1;
-                book->purchases += 1;
                 ht_put(users_ht, user_name, strlen(user_name), book_name, strlen(book_name),
                        user);
             }
@@ -86,6 +86,7 @@ void return_book(hashtable_t *users_ht, hashtable_t *books_ht, char book_name[B_
             user->borrow_period = 0;
             book_info_t *book = (book_info_t *)ht_get_details(books_ht, book_name);
             book->borrowed = 0;
+            book->purchases += 1;
             if (book->purchases == 1) {
                 book->rating += rating;
             } else {
@@ -107,7 +108,7 @@ void report_lost(hashtable_t *books_ht, hashtable_t *users_ht,
             printf("You are banned from this library\n");
             return;
         }
-        ht_remove_entry(books_ht, book_name, BOOKS);
+        remove_book_from_ht(books_ht, book_name);
         user->points -= 50;
         user->has_borrowed = 0;
         user->borrow_period = 0;
