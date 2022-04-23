@@ -42,7 +42,7 @@ void print_book_details(hashtable_t *books_ht, char book_name[B_MAX]) {
         // getting information of the book to print it
         book_info_t *book_info = (book_info_t *)ht_get_details(books_ht, book_name);
         printf("Rating:%.3f ", book_info->rating);
-        printf("Purchases:%.3f\n", book_info->purchases);
+        printf("Purchases:%d\n", book_info->purchases);
     } else {
         printf("The book is not in the library.\n");
     }

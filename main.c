@@ -24,7 +24,7 @@
 int main(void) {
     char command[C_MAX], line[BUF], book_name[B_MAX], key_name[KV_MAX],
          value_name[KV_MAX], user_name[U_MAX];
-    int go = 1, def_number;
+    int go = 1, def_number, borrow_days, days_since_borrowed, rating;
     hashtable_t *books_ht = ht_create(HMAX, hash_function_string, compare_function_strings,
                                       BOOKS);
     hashtable_t *users_ht = ht_create(HMAX, hash_function_string, compare_function_strings,
@@ -62,6 +62,20 @@ int main(void) {
         } else if (strcmp(command, "ADD_USER") == 0) {
             scanf("%s", user_name);
             add_user(users_ht, user_name);
+        } else if (strcmp(command, "BORROW") == 0) {
+            fgets(line, BUF, stdin);
+            get_book_name(line, book_name);
+            sscanf(line + 1, "%s", user_name);
+            // reading data from specific address skipping spaces and ""
+            sscanf(line + 5 + strlen(user_name) + strlen(book_name), "%d", &borrow_days);
+            borrow_book(users_ht, books_ht, user_name, book_name, borrow_days);
+        } else if (strcmp(command, "RETURN") == 0) {
+            fgets(line, BUF, stdin);
+            get_book_name(line, book_name);
+            sscanf(line + 1, "%s", user_name);
+            sscanf(line + 5 + strlen(user_name) + strlen(book_name), "%d%d",
+                   &days_since_borrowed, &rating);
+            
         }
     }
 }

@@ -33,13 +33,14 @@ typedef struct hashtable_t {
 
 typedef struct book_info_t {
     double rating;
-    double purchases;
+    int purchases;
     int borrowed;
 } book_info_t;
 
 typedef struct user_info_t {
     int points;
     int banned;
+    int has_borrowed;
     int borrow_period;
     int return_period;
 } user_info_t;

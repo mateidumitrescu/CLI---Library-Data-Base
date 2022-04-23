@@ -15,18 +15,21 @@ void shift_letters(char book_name[B_MAX]) {
 }
 
 void get_book_name(char line[BUF], char book_name[B_MAX]) {
-    int count = 0;
-    int line_index = 0;
+    int pos = 0;
+    while (line[pos] != '"') {
+        pos++;
+    }
     int book_index = 0;
+    int count = 0;
     while (count < 2) {
-        if (line[line_index] != '"') {
-            book_name[book_index] = line[line_index];
+        if (line[pos] != '"') {
+            book_name[book_index] = line[pos];
             book_index++;
         } else {
             count++;
         }
-        line_index++;
+        pos++;
     }
     book_name[book_index] = '\0';
-    shift_letters(book_name);
+    //shift_letters(book_name);
 }

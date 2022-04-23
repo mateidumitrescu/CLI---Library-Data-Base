@@ -225,7 +225,7 @@ void ht_put(hashtable_t *ht, void *key, unsigned int key_size,
     memcpy(data.value, value, value_size);
 
     
-    ll_add_nth_node(ht->buckets[id], 0, &data, &details);
+    ll_add_nth_node(ht->buckets[id], 0, &data, details);
     ht->size++;
 }
 
