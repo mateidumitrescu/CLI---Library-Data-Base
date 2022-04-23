@@ -42,7 +42,12 @@ typedef struct user_info_t {
     int banned;
     int has_borrowed;
     int borrow_period;
-    int return_period;
 } user_info_t;
+
+typedef struct book_ranking_t {
+    double rating;
+    int purchases;
+    char *name;
+} book_ranking_t;
 
 #endif  // STRUCTURES_H_

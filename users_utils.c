@@ -9,6 +9,9 @@
 
 #define U_MAX 20
 #define B_MAX 40
+#define DEFINITIONS "definitions"  // Macros for dictionary types
+#define BOOKS "books"  // Macros for dictionary types
+#define USERS "users"  // Macros for dictionary types
 
 void add_user(hashtable_t *users_ht, char user_name[U_MAX]) {
     if (ht_has_key(users_ht, user_name)) {
@@ -39,7 +42,7 @@ void borrow_book(hashtable_t *users_ht, hashtable_t *books_ht, char user_name[U_
                 printf("You have already borrowed a book.\n");
                 return;
             } else {
-                // changing details of book and user
+                // changing details of book and user, everything was checked about the user
                 user->has_borrowed = 1;
                 user->borrow_period = borrow_days;
                 book->borrowed = 1;
@@ -51,6 +54,68 @@ void borrow_book(hashtable_t *users_ht, hashtable_t *books_ht, char user_name[U_
             printf("The book is not in the library.\n");
             return;
         }
+    } else {
+        printf("You are not registered yet.\n");
+    }
+}
+
+void return_book(hashtable_t *users_ht, hashtable_t *books_ht, char book_name[B_MAX],
+                 char user_name[U_MAX], int days_since_borrowed, int rating) {
+    user_info_t *user = (user_info_t *)ht_get_details(users_ht, user_name);
+    if (user->banned) {
+        printf("You are banned from this library.\n");
+        return;
+    } else if (user->has_borrowed) {
+        char *borrowed_book = (char *)ht_get(users_ht, user_name);
+        if (strcmp(book_name, borrowed_book)) {
+            printf("You didn't borrow this book.\n");
+            return;
+        } else {
+            // returning the book starts here if everything was checked about the user
+            int days_diff = user->borrow_period - days_since_borrowed;
+            if (days_diff >= 0) {
+                user->points += days_diff;
+            } else {
+                user->points += 2 * days_diff;
+            }
+            if (user->points < 0) {
+                printf("The user %s has been banned.\n", user_name);
+                user->banned = 1;
+            }
+            user->has_borrowed = 0;
+            user->borrow_period = 0;
+            book_info_t *book = (book_info_t *)ht_get_details(books_ht, book_name);
+            book->borrowed = 0;
+            if (book->purchases == 1) {
+                book->rating += rating;
+            } else {
+                book->rating = (book->rating + rating) / 2;
+            }
+            ht_put(users_ht, user_name, strlen(user_name), NULL, 0, user);
+        }
+    } else {
+        printf("You didn't borrow this book.\n");
+        return;
+    }
+}
+
+void report_lost(hashtable_t *books_ht, hashtable_t *users_ht,
+                 char user_name[U_MAX], char book_name[U_MAX]) {
+    if (ht_has_key(users_ht, user_name)) {
+        user_info_t *user = (user_info_t *)ht_get_details(users_ht, user_name);
+        if (user->banned) {
+            printf("You are banned from this library\n");
+            return;
+        }
+        ht_remove_entry(books_ht, book_name, BOOKS);
+        user->points -= 50;
+        user->has_borrowed = 0;
+        user->borrow_period = 0;
+        if (user->points < 0) {
+            user->banned = 1;
+            printf("The user %s has been banned.\n", user_name);
+        }
+        ht_put(users_ht, user_name, strlen(user_name), NULL, 0, user);
     } else {
         printf("You are not registered yet.\n");
     }

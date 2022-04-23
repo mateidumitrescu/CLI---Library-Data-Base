@@ -289,14 +289,13 @@ void ht_remove_entry(hashtable_t *ht, void *key, char dictionary_type[S])
         free(current->details);
         free(data->key);
         ht_free(definitions_ht, DEFINITIONS);
-        free(data);
         free(current);
     } else if (strcmp(dictionary_type, DEFINITIONS) == 0) {
         free(data->key);
         free(data->value);
         free(data);
         free(current);
-    }
+    } // TODO for users
 
     ht->size--;
 

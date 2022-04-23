@@ -12,4 +12,12 @@ void add_user(hashtable_t *users_ht, char user_name[U_MAX]);
 void borrow_book(hashtable_t *users_ht, hashtable_t *books_ht, char user_name[U_MAX],
                  char book_name[B_MAX], int borrow_days);
 
+// function to return a book for a user
+void return_book(hashtable_t *users_ht, hashtable_t *books_ht, char book_name[B_MAX],
+                 char user_name[U_MAX], int days_since_borrowed, int rating);
+
+// function to declare a book has been lost
+void report_lost(hashtable_t *books_ht, hashtable_t *users_ht,
+                 char user_name[U_MAX], char book_name[U_MAX]);
+
 #endif  // USERS_UTILS_H_
