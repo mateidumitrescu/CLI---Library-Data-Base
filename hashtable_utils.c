@@ -209,7 +209,8 @@ void *ht_get(hashtable_t *ht, void *key)
 }
 
 void ht_put(hashtable_t *ht, void *key, unsigned int key_size,
-	        void *value, unsigned int value_size, void *details)
+	        void *value, unsigned int value_size, void *details,
+            char dictionary_type[S])
 {
 	if (ht_has_key(ht, key)) {
         void *key_value = ht_get(ht, key);
@@ -223,9 +224,16 @@ void ht_put(hashtable_t *ht, void *key, unsigned int key_size,
     data.value = malloc(value_size);
     memcpy(data.key, key, key_size);
     memcpy(data.value, value, value_size);
-
+    if (strcmp(dictionary_type, BOOKS) == 0) {
+        book_info_t *book_details = (book_info_t *)details;
+        ll_add_nth_node(ht->buckets[id], 0, &data, book_details);
+    } else if (strcmp(dictionary_type, DEFINITIONS) == 0) {
+        ll_add_nth_node(ht->buckets[id], 0, &data, NULL);
+    } else if (strcmp(dictionary_type, USERS) == 0) {
+        user_info_t *user_details = (user_info_t *)details;
+        ll_add_nth_node(ht->buckets[id], 0, &data, user_details);
+    }
     
-    ll_add_nth_node(ht->buckets[id], 0, &data, details);
     ht->size++;
 }
 
@@ -239,7 +247,8 @@ void ht_free(hashtable_t *ht, char dictionary_type[S])
                 node = node->next;
 
                 key_value_t *data = (key_value_t *)prev->data;
-                if (strcmp(dictionary_type, DEFINITIONS) == 0) {
+                if (strcmp(dictionary_type, DEFINITIONS) == 0 ||
+                    strcmp(dictionary_type, USERS) == 0) {
                     free(data->key);
                     free(data->value);
                     free(prev->data);
@@ -251,7 +260,7 @@ void ht_free(hashtable_t *ht, char dictionary_type[S])
                     ht_free(definitions_ht, DEFINITIONS);
                     free(prev->data);
                     free(prev);
-                } //TODO for users
+                }
             }
         }
         free(ht->buckets[i]);

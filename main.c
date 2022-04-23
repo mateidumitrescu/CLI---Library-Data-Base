@@ -83,6 +83,8 @@ int main(void) {
         } else if (strcmp(command, "EXIT") == 0) {
             day_is_over(books_ht, users_ht);
             go = 0;
+            ht_free(books_ht, BOOKS);
+            ht_free(users_ht, USERS);
         }
     }
     return 0;

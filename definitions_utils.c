@@ -22,7 +22,7 @@ void add_definition(hashtable_t *books_ht, char book_name[B_MAX],
         hashtable_t *definitions_ht = (hashtable_t *)ht_get(books_ht, book_name);
         int key_size = strlen(key_name);
         int value_size = strlen(value_name);
-        ht_put(definitions_ht, key_name, key_size, value_name, value_size, NULL);
+        ht_put(definitions_ht, key_name, key_size, value_name, value_size, NULL, DEFINITIONS);
     } else {
         printf("The book is not in the library\n");
     }

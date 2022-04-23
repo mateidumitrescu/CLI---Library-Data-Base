@@ -24,7 +24,7 @@ void add_book_in_ht(hashtable_t *books_ht, char book_name[B_MAX], int def_number
         int key_size = strlen(key_name);
         int value_size = strlen(value_name);
         // adding key and definition in ht
-        ht_put(definitions_hashtable, key_name, key_size, value_name, value_size, NULL);
+        ht_put(definitions_hashtable, key_name, key_size, value_name, value_size, NULL, DEFINITIONS);
         def_number--;
     }
     int book_size = strlen(book_name);
@@ -33,7 +33,7 @@ void add_book_in_ht(hashtable_t *books_ht, char book_name[B_MAX], int def_number
     book_info.rating = 0;
     book_info.borrowed = 0;  // setting details at 0 when adding a new book
     ht_put(books_ht, book_name, book_size, definitions_hashtable, sizeof(*definitions_hashtable),
-           &book_info);
+           &book_info, BOOKS);
 }
 
 void print_book_details(hashtable_t *books_ht, char book_name[B_MAX]) {

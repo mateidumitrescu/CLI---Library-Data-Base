@@ -39,7 +39,8 @@ void *ht_get(hashtable_t *ht, void *key);
 
 // function to add (key, value) in ht or replace value if the key was used
 void ht_put(hashtable_t *ht, void *key, unsigned int key_size,
-	        void *value, unsigned int value_size, void *details);
+	        void *value, unsigned int value_size, void *details,
+			char dictionary_type[S]);
 
 // function to free data from a hashtable
 void ht_free(hashtable_t *ht, char dictionary_type[S]);
