@@ -36,6 +36,7 @@ typedef struct hashtable_t {
 
 typedef struct book_info_t {
     double rating;
+    int sum_of_ratings;
     int purchases;
     int borrowed;
 } book_info_t;

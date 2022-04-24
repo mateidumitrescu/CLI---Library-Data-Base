@@ -14,8 +14,10 @@
 #define BOOKS "books"  // Macros for dictionary types
 #define USERS "users"  // Macros for dictionary types
 
-void add_book_in_ht(hashtable_t *books_ht, char book_name[B_MAX], int def_number) {
-    hashtable_t *definitions_hashtable = ht_create(HMAX, hash_function_string, compare_function_strings,
+void add_book_in_ht(hashtable_t *books_ht, char book_name[B_MAX],
+                    int def_number) {
+    hashtable_t *definitions_hashtable = ht_create(HMAX, hash_function_string,
+                                                   compare_function_strings,
                                                    DEFINITIONS);
     char key_name[KV_MAX];
     char value_name[KV_MAX];
@@ -24,15 +26,18 @@ void add_book_in_ht(hashtable_t *books_ht, char book_name[B_MAX], int def_number
         int key_size = strlen(key_name) + 1;
         int value_size = strlen(value_name) + 1;
         // adding key and definition in ht
-        ht_put(definitions_hashtable, key_name, key_size, value_name, value_size, NULL, DEFINITIONS);
+        ht_put(definitions_hashtable, key_name, key_size, value_name,
+               value_size, NULL, DEFINITIONS);
         def_number--;
     }
     int book_size = strlen(book_name) + 1;
     book_info_t book_info;
     book_info.purchases = 0;
     book_info.rating = 0;
+    book_info.sum_of_ratings = 0;
     book_info.borrowed = 0;  // setting details at 0 when adding a new book
-    ht_put(books_ht, book_name, book_size, definitions_hashtable, sizeof(*definitions_hashtable),
+    ht_put(books_ht, book_name, book_size, definitions_hashtable,
+           sizeof(*definitions_hashtable),
            &book_info, BOOKS);
     free(definitions_hashtable);
 }
@@ -41,7 +46,8 @@ void print_book_details(hashtable_t *books_ht, char book_name[B_MAX]) {
     if (ht_has_key(books_ht, book_name)) {
         printf("Name:%s ", book_name);
         // getting information of the book to print it
-        book_info_t *book_info = (book_info_t *)ht_get_details(books_ht, book_name);
+        book_info_t *book_info = (book_info_t *)ht_get_details(books_ht,
+                                                               book_name);
         printf("Rating:%.3f ", book_info->rating);
         printf("Purchases:%d\n", book_info->purchases);
     } else {

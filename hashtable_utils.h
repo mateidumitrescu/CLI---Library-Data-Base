@@ -34,6 +34,9 @@ hashtable_t *ht_create(unsigned int hmax, unsigned int (*hash_function)(void*),
 // function to check if a key was used before
 int ht_has_key(hashtable_t *ht, void *key);
 
+// function to return full key_value_t structure
+void *ht_get_key_value(hashtable_t *ht, void *key);
+
 // function to return the value from a given key
 void *ht_get(hashtable_t *ht, void *key);
 
