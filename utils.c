@@ -80,8 +80,8 @@ void sort_arr_users(user_ranking_t *arr, unsigned int size) {
 }
 
 void day_is_over(hashtable_t *books_ht, hashtable_t *users_ht) {
+    printf("Books ranking:\n");
     if (books_ht->size > 0) {
-        printf("Books ranking:\n");
         book_ranking_t *arr_books = malloc(books_ht->size * sizeof(book_ranking_t));
         int index = 0;
         for (unsigned int i = 0; i < books_ht->hmax; i++) {
@@ -102,12 +102,12 @@ void day_is_over(hashtable_t *books_ht, hashtable_t *users_ht) {
         }
         free(arr_books);  // free auxiliars
     }
+    printf("Users ranking:\n");
     if (users_ht->size > 0) {
         // now sorting for users
-        printf("Users ranking:\n");
         // firstly, we count how many users are not banned
         unsigned int count_users = 0;
-        for (unsigned int i = 0; i < users_ht->size; i++) {
+        for (unsigned int i = 0; i < users_ht->hmax; i++) {
             ll_node_t *current = users_ht->buckets[i]->head;
             while (current != NULL) {
                 key_value_t *user = (key_value_t *)current->data;
@@ -120,7 +120,7 @@ void day_is_over(hashtable_t *books_ht, hashtable_t *users_ht) {
         }
         int index = 0;
         user_ranking_t *arr_users = malloc(count_users * sizeof(user_ranking_t));
-        for (unsigned int i = 0; i < users_ht->size; i++) {
+        for (unsigned int i = 0; i < users_ht->hmax; i++) {
             ll_node_t *current = users_ht->buckets[i]->head;
             while (current != NULL) {
                 key_value_t *user = (key_value_t *)current->data;

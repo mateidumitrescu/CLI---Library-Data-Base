@@ -50,7 +50,7 @@ void ll_add_nth_node(linked_list_t* list, unsigned int n, void *new_data, void *
         new_node->details = malloc(list->details_size);
         memcpy(new_node->details, details, list->details_size);
     } else {  // definitions dictionary doesn't need details
-        new_node->details = NULL; //TODO check if there is any other case
+        new_node->details = NULL;
     }
 
     new_node->next = curr;
@@ -214,6 +214,11 @@ void ht_put(hashtable_t *ht, void *key, unsigned int key_size,
 {
 	if (ht_has_key(ht, key)) {
         void *key_value = ht_get(ht, key);
+        if (strcmp(dictionary_type, USERS) == 0) {
+            void *tmp = malloc(value_size);
+            free(key_value);
+            key_value = tmp;
+        }
         memcpy(key_value, value, value_size);
         return;
     }
@@ -221,8 +226,8 @@ void ht_put(hashtable_t *ht, void *key, unsigned int key_size,
     int id = ht->hash_function(key) % ht->hmax;
     key_value_t data;
     data.key = malloc(key_size);
-    data.value = malloc(value_size);
     memcpy(data.key, key, key_size);
+    data.value = malloc(value_size);
     memcpy(data.value, value, value_size);
     if (strcmp(dictionary_type, BOOKS) == 0) {
         book_info_t *book_details = (book_info_t *)details;
@@ -249,6 +254,7 @@ void ht_free(hashtable_t *ht, char dictionary_type[S])
                 key_value_t *data = (key_value_t *)prev->data;
                 if (strcmp(dictionary_type, USERS) == 0) {
                     free(data->key);
+                    free(prev->details);
                     free(data->value);
                     free(prev->data);
                     free(prev);
@@ -261,6 +267,7 @@ void ht_free(hashtable_t *ht, char dictionary_type[S])
                     free(prev);
                 } else if (strcmp(dictionary_type, DEFINITIONS) == 0) {
                     free(data->key);
+                    free(data->value);
                     free(prev->data);
                     free(prev);
                 }
@@ -301,6 +308,7 @@ void ht_remove_entry(hashtable_t *ht, void *key, char dictionary_type[S])
         free(current->details);
         free(data->key);
         ht_free(definitions_ht, DEFINITIONS);
+        free(current->data);
         free(current);
     } else if (strcmp(dictionary_type, DEFINITIONS) == 0) {
         free(data->key);

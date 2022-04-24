@@ -19,7 +19,7 @@ void add_user(hashtable_t *users_ht, char user_name[U_MAX]) {
         printf("User is already registered.\n");
         return;
     }
-    int user_name_size = strlen(user_name);
+    int user_name_size = strlen(user_name) + 1;
     user_info_t user;
     user.points = 100;  // every user gets 100 points at registration
     user.banned = 0;
@@ -47,7 +47,7 @@ void borrow_book(hashtable_t *users_ht, hashtable_t *books_ht, char user_name[U_
                 user->has_borrowed = 1;
                 user->borrow_period = borrow_days;
                 book->borrowed = 1;
-                ht_put(users_ht, user_name, strlen(user_name), book_name, strlen(book_name),
+                ht_put(users_ht, user_name, strlen(user_name) + 1, book_name, strlen(book_name) + 1,
                        user, USERS);
             }
         } else {
@@ -92,7 +92,7 @@ void return_book(hashtable_t *users_ht, hashtable_t *books_ht, char book_name[B_
             } else {
                 book->rating = (book->rating + rating) / 2;
             }
-            ht_put(users_ht, user_name, strlen(user_name), NULL, 0, user, USERS);
+            ht_put(users_ht, user_name, strlen(user_name) + 1, NULL, 0, user, USERS);
         }
     } else {
         printf("You didn't borrow this book.\n");
