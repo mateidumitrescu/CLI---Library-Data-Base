@@ -247,8 +247,7 @@ void ht_free(hashtable_t *ht, char dictionary_type[S])
                 node = node->next;
 
                 key_value_t *data = (key_value_t *)prev->data;
-                if (strcmp(dictionary_type, DEFINITIONS) == 0 ||
-                    strcmp(dictionary_type, USERS) == 0) {
+                if (strcmp(dictionary_type, USERS) == 0) {
                     free(data->key);
                     free(data->value);
                     free(prev->data);
@@ -258,6 +257,10 @@ void ht_free(hashtable_t *ht, char dictionary_type[S])
                     free(data->key);
                     hashtable_t *definitions_ht = (hashtable_t *)data->value;
                     ht_free(definitions_ht, DEFINITIONS);
+                    free(prev->data);
+                    free(prev);
+                } else if (strcmp(dictionary_type, DEFINITIONS) == 0) {
+                    free(data->key);
                     free(prev->data);
                     free(prev);
                 }
@@ -304,7 +307,7 @@ void ht_remove_entry(hashtable_t *ht, void *key, char dictionary_type[S])
         free(data->value);
         free(data);
         free(current);
-    } // TODO for users
+    } // no need for users
 
     ht->size--;
 
