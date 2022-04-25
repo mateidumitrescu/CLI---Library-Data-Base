@@ -6,6 +6,9 @@
 
 #include "structures.h"
 #include "hashtable_utils.h"
+#include "books_utils.h"
+_HOME_MATEIDUMITRESCU_DOCUMENTS_TEMA2_SD_HASHTABLE_UTILS_H_
+_HOME_MATEIDUMITRESCU_DOCUMENTS_TEMA2_SD_STRUCTURES_H_
 
 #define B_MAX 40
 #define KV_MAX 20

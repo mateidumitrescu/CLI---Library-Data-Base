@@ -37,7 +37,7 @@ void get_definition(hashtable_t *books_ht, char book_name[B_MAX],
                                                             book_name);
         if (ht_has_key(definitions_ht, key_name)) {
             char *value_name = (char *)ht_get(definitions_ht, key_name);
-            printf("%s\n", value_name);  
+            printf("%s\n", value_name);
         } else {
             printf("The definition is not in the book.\n");
         }
@@ -49,7 +49,8 @@ void get_definition(hashtable_t *books_ht, char book_name[B_MAX],
 void remove_definition(hashtable_t *books_ht, char book_name[B_MAX],
                        char key_name[KV_MAX]) {
     if (ht_has_key(books_ht, book_name)) {
-        hashtable_t *definitions_ht = (hashtable_t *)ht_get(books_ht, book_name);
+        hashtable_t *definitions_ht =
+        (hashtable_t *)ht_get(books_ht, book_name);
         if (ht_has_key(definitions_ht, key_name)) {
             ht_remove_entry(definitions_ht, key_name, DEFINITIONS);
         } else {

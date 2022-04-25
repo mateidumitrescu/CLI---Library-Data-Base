@@ -196,7 +196,7 @@ int ht_has_key(hashtable_t *ht, void *key)
 void *ht_get_key_value(hashtable_t *ht, void *key) {
     if (ht == NULL || key == NULL)
         return NULL;
-    
+
     if (ht_has_key(ht, key) == 0)
         return NULL;
 
@@ -259,12 +259,11 @@ void ht_put(hashtable_t *ht, void *key, unsigned int key_size,
         user_info_t *user_details = (user_info_t *)details;
         ll_add_nth_node(ht->buckets[id], 0, &data, user_details);
     }
-    
+
     ht->size++;
 }
 
-void ht_free(hashtable_t *ht, char dictionary_type[S])
-{	
+void ht_free(hashtable_t *ht, char dictionary_type[S]) {
     for (unsigned int i = 0; i < ht->hmax; i++) {
         if (ht->buckets[i]->head != NULL) {
             ll_node_t *node = ht->buckets[i]->head, *prev;
@@ -300,7 +299,6 @@ void ht_free(hashtable_t *ht, char dictionary_type[S])
     }
     free(ht->buckets);
     free(ht);
-
 }
 
 void ht_remove_entry(hashtable_t *ht, void *key, char dictionary_type[S])

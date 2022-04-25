@@ -24,17 +24,21 @@ int main(void) {
     char command[C_MAX], line[BUF], book_name[B_MAX], key_name[KV_MAX],
          value_name[KV_MAX], user_name[U_MAX];
     int go = 1, def_number, borrow_days, days_since_borrowed, rating, hmax = 10;
-    hashtable_t *books_ht = ht_create(hmax, hash_function_string, compare_function_strings,
+    hashtable_t *books_ht = ht_create(hmax, hash_function_string,
+                                      compare_function_strings,
                                       BOOKS);
-    hashtable_t *users_ht = ht_create(hmax, hash_function_string, compare_function_strings,
+    hashtable_t *users_ht = ht_create(hmax, hash_function_string,
+                                      compare_function_strings,
                                       USERS);
     while (go) {
         scanf("%s", command);
         if (strcmp(command, "ADD_BOOK") == 0) {
             fgets(line, BUF, stdin);
             get_book_name(line, book_name);
-            sscanf(line + strlen(book_name) + 4, "%d", &def_number); // number of definitions
-            add_book_in_ht(books_ht, book_name, def_number);  // beginning of hashtables
+            // number of definitions
+            sscanf(line + strlen(book_name) + 4, "%d", &def_number);
+            // beginning of hashtables
+            add_book_in_ht(books_ht, book_name, def_number);
         } else if (strcmp(command, "GET_BOOK") == 0) {
             fgets(line, BUF, stdin);
             get_book_name(line, book_name);
@@ -66,7 +70,8 @@ int main(void) {
             get_book_name(line, book_name);
             sscanf(line + 1, "%s", user_name);
             // reading data from specific address skipping spaces and ""
-            sscanf(line + 5 + strlen(user_name) + strlen(book_name), "%d", &borrow_days);
+            sscanf(line + 5 + strlen(user_name) + strlen(book_name),
+                   "%d", &borrow_days);
             borrow_book(users_ht, books_ht, user_name, book_name, borrow_days);
         } else if (strcmp(command, "RETURN") == 0) {
             fgets(line, BUF, stdin);
@@ -74,7 +79,8 @@ int main(void) {
             sscanf(line + 1, "%s", user_name);
             sscanf(line + 5 + strlen(user_name) + strlen(book_name), "%d%d",
                    &days_since_borrowed, &rating);
-            return_book(users_ht, books_ht, book_name, user_name, days_since_borrowed, rating);
+            return_book(users_ht, books_ht, book_name, user_name,
+                        days_since_borrowed, rating);
         } else if (strcmp(command, "LOST") == 0) {
             fgets(line, BUF, stdin);
             get_book_name(line, book_name);

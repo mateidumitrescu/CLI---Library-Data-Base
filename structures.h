@@ -29,7 +29,7 @@ typedef struct key_value_t {
 typedef struct hashtable_t {
 	linked_list_t **buckets;
 	unsigned int size;
-	unsigned int hmax; 
+	unsigned int hmax;
 	unsigned int (*hash_function)(void*);
 	int (*compare_function)(void*, void*);
 } hashtable_t;

@@ -27,7 +27,8 @@ void add_user(hashtable_t *users_ht, char user_name[U_MAX]) {
     ht_put(users_ht, user_name, user_name_size, NULL, 0, &user, USERS);
 }
 
-void borrow_book(hashtable_t *users_ht, hashtable_t *books_ht, char user_name[U_MAX],
+void borrow_book(hashtable_t *users_ht, hashtable_t *books_ht,
+                 char user_name[U_MAX],
                  char book_name[B_MAX], int borrow_days) {
     if (ht_has_key(users_ht, user_name)) {
         user_info_t *user = (user_info_t *)ht_get_details(users_ht, user_name);
@@ -38,7 +39,8 @@ void borrow_book(hashtable_t *users_ht, hashtable_t *books_ht, char user_name[U_
             printf("You have already borrowed a book.\n");
             return;
         } else if (ht_has_key(books_ht, book_name)) {
-            book_info_t *book = (book_info_t *)ht_get_details(books_ht, book_name);
+            book_info_t *book =
+            (book_info_t *)ht_get_details(books_ht, book_name);
             if (user->has_borrowed) {
                 printf("You have already borrowed a book.\n");
                 return;
@@ -46,11 +48,13 @@ void borrow_book(hashtable_t *users_ht, hashtable_t *books_ht, char user_name[U_
                 printf("The book is borrowed.\n");
                 return;
             } else {
-                // changing details of book and user, everything was checked about the user
+                // changing details of book and user,
+                // everything was checked about the user
                 user->has_borrowed = 1;
                 user->borrow_period = borrow_days;
                 book->borrowed = 1;
-                ht_put(users_ht, user_name, strlen(user_name) + 1, book_name, strlen(book_name) + 1,
+                ht_put(users_ht, user_name, strlen(user_name) + 1, book_name,
+                       strlen(book_name) + 1,
                        user, USERS);
             }
         } else {
@@ -62,8 +66,10 @@ void borrow_book(hashtable_t *users_ht, hashtable_t *books_ht, char user_name[U_
     }
 }
 
-void return_book(hashtable_t *users_ht, hashtable_t *books_ht, char book_name[B_MAX],
-                 char user_name[U_MAX], int days_since_borrowed, int rating) {
+void return_book(hashtable_t *users_ht, hashtable_t *books_ht,
+                 char book_name[B_MAX],
+                 char user_name[U_MAX], int days_since_borrowed,
+                 int rating) {
     user_info_t *user = (user_info_t *)ht_get_details(users_ht, user_name);
     if (user->banned) {
         printf("You are banned from this library.\n");
@@ -74,7 +80,8 @@ void return_book(hashtable_t *users_ht, hashtable_t *books_ht, char book_name[B_
             printf("You didn't borrow this book.\n");
             return;
         } else {
-            // returning the book starts here if everything was checked about the user
+            // returning the book starts here if
+            // everything was checked about the user
             int days_diff = user->borrow_period - days_since_borrowed;
             if (days_diff >= 0) {
                 user->points += days_diff;
@@ -82,17 +89,21 @@ void return_book(hashtable_t *users_ht, hashtable_t *books_ht, char book_name[B_
                 user->points += 2 * days_diff;
             }
             if (user->points < 0) {
-                printf("The user %s has been banned from this library.\n", user_name);
+                printf("The user %s has been banned from this library.\n",
+                user_name);
                 user->banned = 1;
             }
             user->has_borrowed = 0;
             user->borrow_period = 0;
-            book_info_t *book = (book_info_t *)ht_get_details(books_ht, book_name);
+            book_info_t *book =
+            (book_info_t *)ht_get_details(books_ht, book_name);
             book->borrowed = 0;
             book->purchases += 1;
             book->sum_of_ratings += rating;
-            book->rating = (double)(book->sum_of_ratings) / (double)(book->purchases);
-            ht_put(users_ht, user_name, strlen(user_name) + 1, NULL, 0, user, USERS);
+            book->rating =
+            (double)(book->sum_of_ratings) / (double)(book->purchases);
+            ht_put(users_ht, user_name, strlen(user_name) + 1,
+                   NULL, 0, user, USERS);
         }
     } else {
         printf("You didn't borrow this book.\n");
@@ -114,7 +125,8 @@ void report_lost(hashtable_t *books_ht, hashtable_t *users_ht,
         user->borrow_period = 0;
         if (user->points < 0) {
             user->banned = 1;
-            printf("The user %s has been banned from this library.\n", user_name);
+            printf("The user %s has been banned from this library.\n",
+                   user_name);
         }
         ht_put(users_ht, user_name, strlen(user_name), NULL, 0, user, USERS);
     } else {

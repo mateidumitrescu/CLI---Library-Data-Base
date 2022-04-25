@@ -21,4 +21,4 @@ void get_definition(hashtable_t *books_ht, char book_name[B_MAX],
 void remove_definition(hashtable_t *books_ht, char book_name[B_MAX],
                        char key_name[KV_MAX]);
 
-#endif  // DEFINITIONS_UTILS_H_
+#endif  // _HOME_MATEIDUMITRESCU_DOCUMENTS_TEMA2_SD_DEFINITIONS_UTILS_H_
