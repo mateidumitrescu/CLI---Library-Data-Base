@@ -1,7 +1,7 @@
 // Copyright 2022 Rares Matei Dumitrescu mateidum828@gmail.com
 
-#ifndef UTILS_H_
-#define UTILS_H_
+#ifndef _HOME_MATEIDUMITRESCU_DOCUMENTS_TEMA2_SD_UTILS_H_
+#define _HOME_MATEIDUMITRESCU_DOCUMENTS_TEMA2_SD_UTILS_H_
 
 #define BUF 125
 #define B_MAX 40
@@ -21,4 +21,4 @@ void sort_arr_users(user_ranking_t *arr, unsigned int size);
 // function to end the day and program and print rankings
 void day_is_over(hashtable_t *books_ht, hashtable_t *user_ht);
 
-#endif  // UTILS_H_
+#endif  // _HOME_MATEIDUMITRESCU_DOCUMENTS_TEMA2_SD_UTILS_H_

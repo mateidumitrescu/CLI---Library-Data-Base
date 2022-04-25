@@ -89,7 +89,8 @@ void day_is_over(hashtable_t *books_ht, hashtable_t *users_ht) {
             while (current != NULL) {
                 key_value_t *book = (key_value_t *)current->data;
                 strcpy(arr_books[index].name, book->key);
-                book_info_t *book_details = (book_info_t *)ht_get_details(books_ht, book->key);
+                book_info_t *book_details = (book_info_t *)ht_get_details(books_ht,
+                                                                          book->key);
                 arr_books[index].purchases = book_details->purchases;
                 arr_books[index].rating = book_details->rating;
                 index++;
@@ -98,7 +99,9 @@ void day_is_over(hashtable_t *books_ht, hashtable_t *users_ht) {
         }
         sort_arr_books(arr_books, books_ht->size);
         for (unsigned int i = 0; i < books_ht->size; i++) {
-            printf("%d. Name:%s Rating:%.3f Purchases:%d\n", i + 1, arr_books[i].name, arr_books[i].rating, arr_books[i].purchases);
+            printf("%d. Name:%s Rating:%.3f Purchases:%d\n", i + 1, arr_books[i].name,
+                                                            arr_books[i].rating,
+                                                            arr_books[i].purchases);
         }
         free(arr_books);  // free auxiliars
     }
@@ -124,7 +127,8 @@ void day_is_over(hashtable_t *books_ht, hashtable_t *users_ht) {
             ll_node_t *current = users_ht->buckets[i]->head;
             while (current != NULL) {
                 key_value_t *user = (key_value_t *)current->data;
-                user_info_t *user_details = (user_info_t *)ht_get_details(users_ht, user->key);
+                user_info_t *user_details = (user_info_t *)ht_get_details(users_ht,
+                                                                          user->key);
                 if (!user_details->banned) {
                     strcpy(arr_users[index].name, user->key);
                     arr_users[index].points = user_details->points;
@@ -139,5 +143,3 @@ void day_is_over(hashtable_t *books_ht, hashtable_t *users_ht) {
         }
         free(arr_users);  // free auxiliars
     }
-    
-}

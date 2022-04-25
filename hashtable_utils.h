@@ -1,7 +1,7 @@
 // Copyright 2022 Rares Matei Dumitrescu mateidum828@gmail.com
 
-#ifndef HASHTABLE_UTILS_H_
-#define HASHTABLE_UTILS_H_
+#ifndef _HOME_MATEIDUMITRESCU_DOCUMENTS_TEMA2_SD_HASHTABLE_UTILS_H_
+#define _HOME_MATEIDUMITRESCU_DOCUMENTS_TEMA2_SD_HASHTABLE_UTILS_H_
 
 #include "structures.h"
 #define S 40
@@ -54,4 +54,4 @@ void ht_remove_entry(hashtable_t *ht, void *key, char dictionary_type[S]);
 // function to return details of key in a hashtable
 void *ht_get_details(hashtable_t *ht, void *key);
 
-#endif // HASHTABLE_UTILS_H_
+#endif // _HOME_MATEIDUMITRESCU_DOCUMENTS_TEMA2_SD_HASHTABLE_UTILS_H_

@@ -1,7 +1,7 @@
 // Copyright 2022 Rares Matei Dumitrescu mateidum828@gmail.com
 
-#ifndef STRUCTURES_H_
-#define STRUCTURES_H_
+#ifndef _HOME_MATEIDUMITRESCU_DOCUMENTS_TEMA2_SD_STRUCTURES_H_
+#define _HOME_MATEIDUMITRESCU_DOCUMENTS_TEMA2_SD_STRUCTURES_H_
 
 #define B_MAX 40
 #define U_MAX 20
@@ -59,4 +59,4 @@ typedef struct user_ranking_t {
     int points;
 } user_ranking_t;
 
-#endif  // STRUCTURES_H_
+#endif  // _HOME_MATEIDUMITRESCU_DOCUMENTS_TEMA2_SD_STRUCTURES_H_
