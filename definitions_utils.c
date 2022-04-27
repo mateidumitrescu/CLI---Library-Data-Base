@@ -4,8 +4,10 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "structures.h"
-#include "hashtable_utils.h"
+#include "/home/mateidumitrescu/Documents/Tema2-sd/structures.h"
+#include "/home/mateidumitrescu/Documents/Tema2-sd/hashtable_utils.h"
+#include "/home/mateidumitrescu/Documents/Tema2-sd/definitions_utils.h"
+#include "utils.h"
 
 #define HMAX 10
 #define B_MAX 40
@@ -23,8 +25,25 @@ void add_definition(hashtable_t *books_ht, char book_name[B_MAX],
                                                             book_name);
         int key_size = strlen(key_name) + 1;
         int value_size = strlen(value_name) + 1;
+
+        unsigned int id = books_ht->hash_function(book_name) % books_ht->hmax;
+        ll_node_t *node = books_ht->buckets[id]->head;
+        key_value_t *data;
+
+        while (node != NULL) {
+            data = node->data;
+            if (strcmp((char *)data->key, book_name) == 0)
+                break;
+            node = node->next;
+        }
+
         ht_put(definitions_ht, key_name, key_size, value_name,
                value_size, NULL, DEFINITIONS);
+        if (definitions_ht->size > definitions_ht->hmax) {
+            resize_hashtable(&definitions_ht, definitions_ht->hmax, DEFINITIONS);
+        }
+        data->value = definitions_ht;
+
     } else {
         printf("The book is not in the library.\n");
     }

@@ -3,7 +3,7 @@
 #ifndef _HOME_MATEIDUMITRESCU_DOCUMENTS_TEMA2_SD_HASHTABLE_UTILS_H_
 #define _HOME_MATEIDUMITRESCU_DOCUMENTS_TEMA2_SD_HASHTABLE_UTILS_H_
 
-#include "structures.h"
+#include "/home/mateidumitrescu/Documents/Tema2-sd/structures.h"
 #define S 40
 
 // function to create a linked list

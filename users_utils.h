@@ -6,7 +6,7 @@
 #define U_MAX 20
 
 // function to add a user in hashtable
-void add_user(hashtable_t *users_ht, char user_name[U_MAX]);
+void add_user(hashtable_t **users_ht, char user_name[U_MAX]);
 
 // function to borrow a book for a user
 void borrow_book(hashtable_t *users_ht, hashtable_t *books_ht,

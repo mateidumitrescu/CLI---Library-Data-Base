@@ -4,11 +4,14 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define BUF 125
-#define B_MAX 40
 
-#include "structures.h"
-#include "hashtable_utils.h"
+#include "/home/mateidumitrescu/Documents/Tema2-sd/structures.h"
+#include "/home/mateidumitrescu/Documents/Tema2-sd/hashtable_utils.h"
+#include "/home/mateidumitrescu/Documents/Tema2-sd/utils.h"
+
+#define DEFINITIONS "definitions"  // Macros for dictionary types
+#define BOOKS "books"  // Macros for dictionary types
+#define USERS "users"  // Macros for dictionary types
 
 void get_book_name(char line[BUF], char book_name[B_MAX]) {
     int pos = 0;
@@ -144,4 +147,60 @@ void day_is_over(hashtable_t *books_ht, hashtable_t *users_ht) {
         }
         free(arr_users);  // free auxiliars
     }
+}
+
+void resize_hashtable(hashtable_t **ht, int hmax, char dictionary_type[B_MAX]) {
+    hmax = hmax * 2;
+    hashtable_t *new_ht = ht_create(hmax, hash_function_string,
+                                    compare_function_strings,
+                                    dictionary_type);
+    for (unsigned int i = 0; i < (*ht)->hmax; i++) {
+        ll_node_t *current = (*ht)->buckets[i]->head;
+        ll_node_t *prev = current;
+        while (current != NULL) {
+            key_value_t *data = (key_value_t *)current->data;
+            char *key = (char *)data->key;
+            unsigned int key_size = strlen(key) + 1;
+            if (strcmp(dictionary_type, BOOKS) == 0) {
+                hashtable_t *def_ht = (hashtable_t *)data->value;
+                ht_put(new_ht, data->key, key_size, def_ht, sizeof(hashtable_t),
+                       current->details, BOOKS);
+                free(data->key);
+                free(def_ht);
+                free(data);
+            } else if (strcmp(dictionary_type, USERS) == 0) {
+                char *value = NULL;
+                unsigned int value_size = 0;
+                if (data->value != NULL) {
+                    value = (char *)data->value;
+                    value_size = strlen(value) + 1;
+                    ht_put(new_ht, data->key, key_size, data->value, value_size,
+                       current->details, USERS);
+                    free(data->value);
+                } else {
+                    ht_put(new_ht, data->key, key_size, NULL, 0,
+                       current->details, USERS);
+                }
+                free(data->key);
+                free(data);
+            } else {
+                char *value = (char *)data->value;
+                unsigned int value_size = strlen(value) + 1;
+                ht_put(new_ht, data->key, key_size, data->value, value_size,
+                       NULL, DEFINITIONS);
+                free(data->key);
+                free(data->value);
+                free(data);
+            }
+            current = current->next;
+            if (prev->details)
+                free(prev->details);
+            free(prev);
+            prev = current;
+        }
+        free((*ht)->buckets[i]);
+    }
+    free((*ht)->buckets);
+    free(*ht);
+    *ht = new_ht;
 }

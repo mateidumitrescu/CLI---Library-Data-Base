@@ -5,7 +5,9 @@
 #include <string.h>
 #include <inttypes.h>
 
-#include "structures.h"
+#include "/home/mateidumitrescu/Documents/Tema2-sd/structures.h"
+#include "/home/mateidumitrescu/Documents/Tema2-sd/hashtable_utils.h"
+
 #define S 40
 #define DEFINITIONS "definitions"
 #define BOOKS "books"
@@ -236,8 +238,13 @@ void ht_put(hashtable_t *ht, void *key, unsigned int key_size,
             char dictionary_type[S])
 {
 	if (ht_has_key(ht, key)) {
+        
         key_value_t *key_value = ht_get_key_value(ht, key);
         free(key_value->value);
+        if (value == NULL) {
+            key_value->value = NULL;
+            return;
+        }
         key_value->value = malloc(value_size);
         memcpy(key_value->value, value, value_size);
         return;
@@ -247,8 +254,11 @@ void ht_put(hashtable_t *ht, void *key, unsigned int key_size,
     key_value_t data;
     data.key = malloc(key_size);
     memcpy(data.key, key, key_size);
-    data.value = malloc(value_size);
-    memcpy(data.value, value, value_size);
+    data.value = NULL;
+    if (value != NULL) {
+        data.value = malloc(value_size);
+        memcpy(data.value, value, value_size);
+    }
 
     if (strcmp(dictionary_type, BOOKS) == 0) {
         book_info_t *book_details = (book_info_t *)details;
@@ -275,7 +285,7 @@ void ht_free(hashtable_t *ht, char dictionary_type[S]) {
                 if (strcmp(dictionary_type, USERS) == 0) {
                     free(data->key);
                     free(prev->details);
-                    if (sizeof(data->value) > 0) {
+                    if (data->value != NULL) {
                         free(data->value);
                     }
                     free(prev->data);

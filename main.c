@@ -4,12 +4,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "hashtable_utils.h"
-#include "structures.h"
-#include "utils.h"
-#include "books_utils.h"
-#include "definitions_utils.h"
-#include "users_utils.h"
+#include "/home/mateidumitrescu/Documents/Tema2-sd/hashtable_utils.h"
+#include "/home/mateidumitrescu/Documents/Tema2-sd/structures.h"
+#include "/home/mateidumitrescu/Documents/Tema2-sd/utils.h"
+#include "/home/mateidumitrescu/Documents/Tema2-sd/books_utils.h"
+#include "/home/mateidumitrescu/Documents/Tema2-sd/definitions_utils.h"
+#include "/home/mateidumitrescu/Documents/Tema2-sd/users_utils.h"
 
 #define U_MAX 20  // maximum nr of characters in user name
 #define B_MAX 40  // maximum nr of characters in a book name
@@ -23,11 +23,12 @@
 int main(void) {
     char command[C_MAX], line[BUF], book_name[B_MAX], key_name[KV_MAX],
          value_name[KV_MAX], user_name[U_MAX];
-    int go = 1, def_number, borrow_days, days_since_borrowed, rating, hmax = 10;
-    hashtable_t *books_ht = ht_create(hmax, hash_function_string,
+    int go = 1, def_number, borrow_days, days_since_borrowed, rating,
+        hmax_books = 10, hmax_users = 10, hmax_defs = 10;
+    hashtable_t *books_ht = ht_create(hmax_books, hash_function_string,
                                       compare_function_strings,
                                       BOOKS);
-    hashtable_t *users_ht = ht_create(hmax, hash_function_string,
+    hashtable_t *users_ht = ht_create(hmax_users, hash_function_string,
                                       compare_function_strings,
                                       USERS);
     while (go) {
@@ -38,7 +39,8 @@ int main(void) {
             // number of definitions
             sscanf(line + strlen(book_name) + 4, "%d", &def_number);
             // beginning of hashtables
-            add_book_in_ht(books_ht, book_name, def_number);
+            add_book_in_ht(&books_ht, book_name, def_number, &hmax_books,
+                           &hmax_defs);
         } else if (strcmp(command, "GET_BOOK") == 0) {
             fgets(line, BUF, stdin);
             get_book_name(line, book_name);
@@ -64,7 +66,7 @@ int main(void) {
             remove_definition(books_ht, book_name, key_name);
         } else if (strcmp(command, "ADD_USER") == 0) {
             scanf("%s", user_name);
-            add_user(users_ht, user_name);
+            add_user(&users_ht, user_name);
         } else if (strcmp(command, "BORROW") == 0) {
             fgets(line, BUF, stdin);
             get_book_name(line, book_name);
