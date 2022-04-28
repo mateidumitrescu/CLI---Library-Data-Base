@@ -5,8 +5,8 @@
 #include <string.h>
 #include <inttypes.h>
 
-#include "/home/mateidumitrescu/Documents/Tema2-sd/structures.h"
-#include "/home/mateidumitrescu/Documents/Tema2-sd/hashtable_utils.h"
+#include "structures.h"
+#include "hashtable_utils.h"
 
 #define S 40
 #define DEFINITIONS "definitions"
@@ -152,8 +152,7 @@ unsigned int hash_function_string(void *a)
 
 hashtable_t *ht_create(unsigned int hmax,
                        unsigned int (*hash_function)(void*),
-		               int (*compare_function)(void*, void*),
-                       char dictionary_type[S])
+		               int (*compare_function)(void*, void*))
 {
 	hashtable_t *ht = malloc(sizeof(*ht));
     ht->hmax = hmax;
@@ -163,15 +162,8 @@ hashtable_t *ht_create(unsigned int hmax,
 
     ht->buckets = malloc(ht->hmax * sizeof(linked_list_t *));
     for (unsigned int i = 0; i < ht->hmax; i++) {
-        if (strcmp(dictionary_type, BOOKS) == 0) {
-            ht->buckets[i] = ll_create(sizeof(key_value_t),
-                                       sizeof(book_info_t));
-        } else if (strcmp(dictionary_type, DEFINITIONS) == 0) {
-            ht->buckets[i] = ll_create(sizeof(key_value_t), 0);
-        } else if (strcmp(dictionary_type, USERS) == 0) {
-            ht->buckets[i] = ll_create(sizeof(key_value_t),
-                                       sizeof(user_info_t));
-        }
+        ht->buckets[i] = ll_create(sizeof(key_value_t),
+                                   sizeof(book_info_t));
         ht->buckets[i]->head = NULL;
     }
 
@@ -180,9 +172,8 @@ hashtable_t *ht_create(unsigned int hmax,
 
 int ht_has_key(hashtable_t *ht, void *key)
 {
-    if (ht == NULL || key == NULL)
+    if (ht->size == 0)
         return 0;
-
     int id = ht->hash_function(key) % ht->hmax;
     ll_node_t *current = ht->buckets[id]->head;
 
@@ -196,12 +187,8 @@ int ht_has_key(hashtable_t *ht, void *key)
 }
 
 void *ht_get_key_value(hashtable_t *ht, void *key) {
-    if (ht == NULL || key == NULL)
-        return NULL;
-
-    if (ht_has_key(ht, key) == 0)
-        return NULL;
-
+    // no need to check if ht_has_key or if key is null,
+    // already did it in call function
     int id = ht->hash_function(key) % ht->hmax;
     ll_node_t *current = ht->buckets[id]->head;
     while (current != NULL) {
@@ -215,12 +202,6 @@ void *ht_get_key_value(hashtable_t *ht, void *key) {
 }
 
 void *ht_get(hashtable_t *ht, void *key) {
-	if (ht == NULL || key == NULL)
-        return NULL;
-
-    if (ht_has_key(ht, key) == 0)
-        return NULL;
-
     int id = ht->hash_function(key) % ht->hmax;
     ll_node_t *current = ht->buckets[id]->head;
     while (current != NULL) {
@@ -238,7 +219,6 @@ void ht_put(hashtable_t *ht, void *key, unsigned int key_size,
             char dictionary_type[S])
 {
 	if (ht_has_key(ht, key)) {
-        
         key_value_t *key_value = ht_get_key_value(ht, key);
         free(key_value->value);
         if (value == NULL) {
@@ -282,25 +262,18 @@ void ht_free(hashtable_t *ht, char dictionary_type[S]) {
                 node = node->next;
 
                 key_value_t *data = (key_value_t *)prev->data;
-                if (strcmp(dictionary_type, USERS) == 0) {
-                    free(data->key);
-                    free(prev->details);
-                    if (data->value != NULL) {
-                        free(data->value);
-                    }
-                    free(prev->data);
-                    free(prev);
-                } else if (strcmp(dictionary_type, BOOKS) == 0) {
+                if (strcmp(dictionary_type, BOOKS) == 0) {
                     free(prev->details);
                     free(data->key);
                     hashtable_t *definitions_ht = (hashtable_t *)data->value;
                     ht_free(definitions_ht, DEFINITIONS);
                     free(prev->data);
                     free(prev);
-                } else if (strcmp(dictionary_type, DEFINITIONS) == 0) {
+                } else {
                     free(data->key);
                     free(data->value);
                     free(prev->data);
+                    free(prev->details);
                     free(prev);
                 }
             }
@@ -311,14 +284,10 @@ void ht_free(hashtable_t *ht, char dictionary_type[S]) {
     free(ht);
 }
 
-void ht_remove_entry(hashtable_t *ht, void *key, char dictionary_type[S])
+void  ht_remove_entry(hashtable_t *ht, void *key, char dictionary_type[S])
 {
-    if (ht == NULL || key == NULL)
-        return;
-
-    if (ht_has_key(ht, key) == 0)
-        return;
-
+    // no need to check if ht_has_key or if key is null,
+    // already did it in call function
     int id = ht->hash_function(key) % ht->hmax;
     ll_node_t *current = ht->buckets[id]->head;
     key_value_t *data;
@@ -352,14 +321,8 @@ void ht_remove_entry(hashtable_t *ht, void *key, char dictionary_type[S])
 }
 
 void *ht_get_details(hashtable_t *ht, void *key) {
-    if (ht == NULL || key == NULL) {
-        return NULL;
-    }
-
-    if (ht_has_key(ht, key) == 0) {
-        return NULL;
-    }
-
+    // no need to check if ht_has_key or if key is null,
+    // already did it in call function
     int id = ht->hash_function(key) % ht->hmax;
     ll_node_t *current = ht->buckets[id]->head;
     while (current != NULL) {

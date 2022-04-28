@@ -3,7 +3,7 @@
 #ifndef _HOME_MATEIDUMITRESCU_DOCUMENTS_TEMA2_SD_HASHTABLE_UTILS_H_
 #define _HOME_MATEIDUMITRESCU_DOCUMENTS_TEMA2_SD_HASHTABLE_UTILS_H_
 
-#include "/home/mateidumitrescu/Documents/Tema2-sd/structures.h"
+#include "structures.h"
 #define S 40
 
 // function to create a linked list
@@ -32,8 +32,7 @@ unsigned int hash_function_string(void *a);
 // function to create a hashtable
 hashtable_t *ht_create(unsigned int hmax,
 					   unsigned int (*hash_function)(void*),
-		               int (*compare_function)(void*, void*),
-					   char dictionary_type[S]);
+		               int (*compare_function)(void*, void*));
 
 // function to check if a key was used before
 int ht_has_key(hashtable_t *ht, void *key);

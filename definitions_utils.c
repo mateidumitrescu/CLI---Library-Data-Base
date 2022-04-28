@@ -4,9 +4,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "/home/mateidumitrescu/Documents/Tema2-sd/structures.h"
-#include "/home/mateidumitrescu/Documents/Tema2-sd/hashtable_utils.h"
-#include "/home/mateidumitrescu/Documents/Tema2-sd/definitions_utils.h"
+#include "structures.h"
+#include "hashtable_utils.h"
+#include "definitions_utils.h"
 #include "utils.h"
 
 #define HMAX 10
@@ -54,9 +54,9 @@ void get_definition(hashtable_t *books_ht, char book_name[B_MAX],
     if (ht_has_key(books_ht, book_name)) {
         hashtable_t *definitions_ht = (hashtable_t *)ht_get(books_ht,
                                                             book_name);
-        if (ht_has_key(definitions_ht, key_name)) {
-            char *value_name = (char *)ht_get(definitions_ht, key_name);
-            printf("%s\n", value_name);
+        char *value_name = (char *)ht_get(definitions_ht, key_name);
+        if (value_name) {
+            printf("%s\n", value_name); 
         } else {
             printf("The definition is not in the book.\n");
         }
@@ -67,9 +67,9 @@ void get_definition(hashtable_t *books_ht, char book_name[B_MAX],
 
 void remove_definition(hashtable_t *books_ht, char book_name[B_MAX],
                        char key_name[KV_MAX]) {
-    if (ht_has_key(books_ht, book_name)) {
-        hashtable_t *definitions_ht =
+    hashtable_t *definitions_ht =
         (hashtable_t *)ht_get(books_ht, book_name);
+    if (definitions_ht) {
         if (ht_has_key(definitions_ht, key_name)) {
             ht_remove_entry(definitions_ht, key_name, DEFINITIONS);
         } else {

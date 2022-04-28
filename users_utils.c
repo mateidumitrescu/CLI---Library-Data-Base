@@ -4,10 +4,10 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "/home/mateidumitrescu/Documents/Tema2-sd/structures.h"
-#include "/home/mateidumitrescu/Documents/Tema2-sd/hashtable_utils.h"
-#include "/home/mateidumitrescu/Documents/Tema2-sd/books_utils.h"
-#include "/home/mateidumitrescu/Documents/Tema2-sd/users_utils.h"
+#include "structures.h"
+#include "hashtable_utils.h"
+#include "books_utils.h"
+#include "users_utils.h"
 #include "utils.h"
 
 #define U_MAX 20
@@ -75,6 +75,7 @@ void return_book(hashtable_t *users_ht, hashtable_t *books_ht,
                  char book_name[B_MAX],
                  char user_name[U_MAX], int days_since_borrowed,
                  int rating) {
+    key_value_t *user_key_value = ht_get_key_value(users_ht, user_name);
     user_info_t *user = (user_info_t *)ht_get_details(users_ht, user_name);
     if (user->banned) {
         printf("You are banned from this library.\n");
@@ -100,6 +101,7 @@ void return_book(hashtable_t *users_ht, hashtable_t *books_ht,
             }
             user->has_borrowed = 0;
             user->borrow_period = 0;
+            
             book_info_t *book =
             (book_info_t *)ht_get_details(books_ht, book_name);
             book->borrowed = 0;
@@ -107,8 +109,8 @@ void return_book(hashtable_t *users_ht, hashtable_t *books_ht,
             book->sum_of_ratings += rating;
             book->rating =
             (double)(book->sum_of_ratings) / (double)(book->purchases);
-            ht_put(users_ht, user_name, strlen(user_name) + 1,
-                   NULL, 0, user, USERS);
+            free(user_key_value->value);
+            user_key_value->value = NULL;
         }
     } else {
         printf("You didn't borrow this book.\n");
@@ -116,15 +118,15 @@ void return_book(hashtable_t *users_ht, hashtable_t *books_ht,
     }
 }
 
-void report_lost(hashtable_t *books_ht, hashtable_t *users_ht,
+void report_lost(hashtable_t **books_ht, hashtable_t *users_ht,
                  char user_name[U_MAX], char book_name[U_MAX]) {
-    if (ht_has_key(users_ht, user_name)) {
         user_info_t *user = (user_info_t *)ht_get_details(users_ht, user_name);
-        if (user->banned) {
+        if (user) {
+            if (user->banned) {
             printf("You are banned from this library.\n");
             return;
         }
-        remove_book_from_ht(books_ht, book_name);
+        remove_book_from_ht(*books_ht, book_name);
         user->points -= 50;
         user->has_borrowed = 0;
         user->borrow_period = 0;

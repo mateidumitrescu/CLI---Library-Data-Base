@@ -4,12 +4,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "/home/mateidumitrescu/Documents/Tema2-sd/hashtable_utils.h"
-#include "/home/mateidumitrescu/Documents/Tema2-sd/structures.h"
-#include "/home/mateidumitrescu/Documents/Tema2-sd/utils.h"
-#include "/home/mateidumitrescu/Documents/Tema2-sd/books_utils.h"
-#include "/home/mateidumitrescu/Documents/Tema2-sd/definitions_utils.h"
-#include "/home/mateidumitrescu/Documents/Tema2-sd/users_utils.h"
+#include "hashtable_utils.h"
+#include "structures.h"
+#include "utils.h"
+#include "books_utils.h"
+#include "definitions_utils.h"
+#include "users_utils.h"
 
 #define U_MAX 20  // maximum nr of characters in user name
 #define B_MAX 40  // maximum nr of characters in a book name
@@ -26,11 +26,9 @@ int main(void) {
     int go = 1, def_number, borrow_days, days_since_borrowed, rating,
         hmax_books = 10, hmax_users = 10, hmax_defs = 10;
     hashtable_t *books_ht = ht_create(hmax_books, hash_function_string,
-                                      compare_function_strings,
-                                      BOOKS);
+                                      compare_function_strings);
     hashtable_t *users_ht = ht_create(hmax_users, hash_function_string,
-                                      compare_function_strings,
-                                      USERS);
+                                      compare_function_strings);
     while (go) {
         scanf("%s", command);
         if (strcmp(command, "ADD_BOOK") == 0) {
@@ -87,7 +85,7 @@ int main(void) {
             fgets(line, BUF, stdin);
             get_book_name(line, book_name);
             sscanf(line + 1, "%s", user_name);
-            report_lost(books_ht, users_ht, user_name, book_name);
+            report_lost(&books_ht, users_ht, user_name, book_name);
         } else if (strcmp(command, "EXIT") == 0) {
             day_is_over(books_ht, users_ht);
             go = 0;

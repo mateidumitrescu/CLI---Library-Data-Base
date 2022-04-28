@@ -20,7 +20,7 @@ void return_book(hashtable_t *users_ht, hashtable_t *books_ht,
                  int days_since_borrowed, int rating);
 
 // function to declare a book has been lost
-void report_lost(hashtable_t *books_ht, hashtable_t *users_ht,
+void report_lost(hashtable_t **books_ht, hashtable_t *users_ht,
                  char user_name[U_MAX], char book_name[U_MAX]);
 
 #endif  // _HOME_MATEIDUMITRESCU_DOCUMENTS_TEMA2_SD_USERS_UTILS_H_

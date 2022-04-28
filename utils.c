@@ -5,9 +5,9 @@
 #include <stdlib.h>
 
 
-#include "/home/mateidumitrescu/Documents/Tema2-sd/structures.h"
-#include "/home/mateidumitrescu/Documents/Tema2-sd/hashtable_utils.h"
-#include "/home/mateidumitrescu/Documents/Tema2-sd/utils.h"
+#include "structures.h"
+#include "hashtable_utils.h"
+#include "utils.h"
 
 #define DEFINITIONS "definitions"  // Macros for dictionary types
 #define BOOKS "books"  // Macros for dictionary types
@@ -32,46 +32,30 @@ void get_book_name(char line[BUF], char book_name[B_MAX]) {
     book_name[book_index] = '\0';
 }
 
-void sort_arr_books(book_ranking_t *arr, unsigned int size) {
-    for (unsigned int i = 0; i < size; i++) {
-        for (unsigned int j = i + 1; j < size; j++) {
-            if (arr[i].rating < arr[j].rating) {
-                book_ranking_t aux = arr[i];
-                arr[i] = arr[j];
-                arr[j] = aux;
-            } else if (arr[i].rating == arr[j].rating) {
-                if (arr[i].purchases < arr[j].purchases) {
-                    book_ranking_t aux = arr[i];
-                    arr[i] = arr[j];
-                    arr[j] = aux;
-                } else if (arr[i].purchases == arr[j].purchases) {
-                    if (strcmp(arr[i].name, arr[j].name) > 0) {
-                        book_ranking_t aux = arr[i];
-                        arr[i] = arr[j];
-                        arr[j] = aux;
-                    }
-                }
-            }
-        }
-    }
+int compare_users( const void* a, const void* b)
+{
+     user_ranking_t user_a = *((user_ranking_t*) a);
+     user_ranking_t user_b = *((user_ranking_t*) b);
+
+     if (user_a.points < user_b.points) return 1;
+     else if (user_a.points > user_b.points) return -1;
+     else if (strcmp(user_a.name, user_b.name) > 0) return 1;
+     else if (strcmp(user_a.name, user_b.name) < 0) return -1;
+     return 0;
 }
 
-void sort_arr_users(user_ranking_t *arr, unsigned int size) {
-    for (unsigned int i = 0; i < size; i++) {
-        for (unsigned int j = i + 1; j < size; j++) {
-            if (arr[i].points < arr[j].points) {
-                user_ranking_t aux = arr[i];
-                arr[i] = arr[j];
-                arr[j] = aux;
-            } else if (arr[i].points == arr[j].points) {
-                if (strcmp(arr[i].name, arr[j].name) > 0) {
-                    user_ranking_t aux = arr[i];
-                    arr[i] = arr[j];
-                    arr[j] = aux;
-                }
-            }
-        }
-    }
+int compare_books( const void* a, const void* b)
+{
+     book_ranking_t book_a = * ( (book_ranking_t*) a );
+     book_ranking_t book_b = * ( (book_ranking_t*) b );
+
+     if (book_a.rating < book_b.rating) return 1;
+     else if (book_a.rating > book_b.rating) return -1;
+     else if (book_a.purchases < book_b.purchases) return 1;
+     else if (book_a.purchases > book_b.purchases) return -1;
+     else if (strcmp(book_a.name, book_b.name) > 0) return 1;
+     else if (strcmp(book_a.name, book_b.name) < 0) return -1;
+     return 0;
 }
 
 void day_is_over(hashtable_t *books_ht, hashtable_t *users_ht) {
@@ -95,7 +79,7 @@ void day_is_over(hashtable_t *books_ht, hashtable_t *users_ht) {
                 current = current->next;
             }
         }
-        sort_arr_books(arr_books, books_ht->size);
+        qsort(arr_books, books_ht->size, sizeof(book_ranking_t), compare_books);
         for (unsigned int i = 0; i < books_ht->size; i++) {
             printf("%d. Name:%s Rating:%.3f Purchases:%d\n",
                    i + 1, arr_books[i].name,
@@ -109,6 +93,9 @@ void day_is_over(hashtable_t *books_ht, hashtable_t *users_ht) {
         // now sorting for users
         // firstly, we count how many users are not banned
         unsigned int count_users = 0;
+        int index = 0;
+        user_ranking_t *arr_users =
+        malloc(users_ht->size * sizeof(user_ranking_t));
         for (unsigned int i = 0; i < users_ht->hmax; i++) {
             ll_node_t *current = users_ht->buckets[i]->head;
             while (current != NULL) {
@@ -117,20 +104,6 @@ void day_is_over(hashtable_t *books_ht, hashtable_t *users_ht) {
                 (user_info_t *)ht_get_details(users_ht, user->key);
                 if (!user_details->banned) {
                     count_users++;
-                }
-                current = current->next;
-            }
-        }
-        int index = 0;
-        user_ranking_t *arr_users =
-        malloc(count_users * sizeof(user_ranking_t));
-        for (unsigned int i = 0; i < users_ht->hmax; i++) {
-            ll_node_t *current = users_ht->buckets[i]->head;
-            while (current != NULL) {
-                key_value_t *user = (key_value_t *)current->data;
-                user_info_t *user_details =
-                (user_info_t *)ht_get_details(users_ht, user->key);
-                if (!user_details->banned) {
                     snprintf(arr_users[index].name,
                              sizeof(arr_users[index].name), "%s",
                              (char *)user->key);
@@ -140,7 +113,7 @@ void day_is_over(hashtable_t *books_ht, hashtable_t *users_ht) {
                 current = current->next;
             }
         }
-        sort_arr_users(arr_users, count_users);
+        qsort(arr_users, count_users, sizeof(user_ranking_t), compare_users);
         for (unsigned int i = 0; i < count_users; i++) {
             printf("%d. Name:%s Points:%d\n",
                    i + 1, arr_users[i].name, arr_users[i].points);
@@ -152,8 +125,7 @@ void day_is_over(hashtable_t *books_ht, hashtable_t *users_ht) {
 void resize_hashtable(hashtable_t **ht, int hmax, char dictionary_type[B_MAX]) {
     hmax = hmax * 2;
     hashtable_t *new_ht = ht_create(hmax, hash_function_string,
-                                    compare_function_strings,
-                                    dictionary_type);
+                                    compare_function_strings);
     for (unsigned int i = 0; i < (*ht)->hmax; i++) {
         ll_node_t *current = (*ht)->buckets[i]->head;
         ll_node_t *prev = current;
