@@ -218,8 +218,8 @@ void ht_put(hashtable_t *ht, void *key, unsigned int key_size,
 	        void *value, unsigned int value_size, void *details,
             char dictionary_type[S])
 {
-	if (ht_has_key(ht, key)) {
-        key_value_t *key_value = ht_get_key_value(ht, key);
+    key_value_t *key_value = ht_get_key_value(ht, key);
+    if(key_value) {
         free(key_value->value);
         if (value == NULL) {
             key_value->value = NULL;
@@ -255,7 +255,7 @@ void ht_put(hashtable_t *ht, void *key, unsigned int key_size,
 
 void ht_free(hashtable_t *ht, char dictionary_type[S]) {
     for (unsigned int i = 0; i < ht->hmax; i++) {
-        if (ht->buckets[i]->head != NULL) {
+
             ll_node_t *node = ht->buckets[i]->head, *prev;
             while (node != NULL) {
                 prev = node;
@@ -277,7 +277,6 @@ void ht_free(hashtable_t *ht, char dictionary_type[S]) {
                     free(prev);
                 }
             }
-        }
         free(ht->buckets[i]);
     }
     free(ht->buckets);

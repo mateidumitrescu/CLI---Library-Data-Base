@@ -35,18 +35,19 @@ void add_user(hashtable_t **users_ht, char user_name[U_MAX]) {
 void borrow_book(hashtable_t *users_ht, hashtable_t *books_ht,
                  char user_name[U_MAX],
                  char book_name[B_MAX], int borrow_days) {
-    if (ht_has_key(users_ht, user_name)) {
         user_info_t *user = (user_info_t *)ht_get_details(users_ht, user_name);
-        if (user->banned) {
+        if (user) {
+            if (user->banned) {
             printf("You are banned from this library.\n");
             return;
         } else if (user->has_borrowed) {
             printf("You have already borrowed a book.\n");
             return;
-        } else if (ht_has_key(books_ht, book_name)) {
+        } else {
             book_info_t *book =
             (book_info_t *)ht_get_details(books_ht, book_name);
-            if (user->has_borrowed) {
+            if (book) {
+                if (user->has_borrowed) {
                 printf("You have already borrowed a book.\n");
                 return;
             } else if (book->borrowed) {
@@ -65,6 +66,7 @@ void borrow_book(hashtable_t *users_ht, hashtable_t *books_ht,
         } else {
             printf("The book is not in the library.\n");
             return;
+        }
         }
     } else {
         printf("You are not registered yet.\n");
