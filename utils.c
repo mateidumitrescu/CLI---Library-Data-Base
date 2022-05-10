@@ -9,9 +9,9 @@
 #include "hashtable_utils.h"
 #include "utils.h"
 
-#define DEFINITIONS "definitions"  // Macros for dictionary types
-#define BOOKS "books"  // Macros for dictionary types
-#define USERS "users"  // Macros for dictionary types
+#define DEFINITIONS 0  // Macros for dictionary types
+#define BOOKS 1  // Macros for dictionary types
+#define USERS 2  // Macros for dictionary types
 
 void get_book_name(char line[BUF], char book_name[B_MAX]) {
     int pos = 0;
@@ -122,7 +122,7 @@ void day_is_over(hashtable_t *books_ht, hashtable_t *users_ht) {
     }
 }
 
-void resize_hashtable(hashtable_t **ht, int hmax, char dictionary_type[B_MAX]) {
+void resize_hashtable(hashtable_t **ht, int hmax, int dictionary_type) {
     hmax = hmax * 2;
     hashtable_t *new_ht = ht_create(hmax, hash_function_string,
                                     compare_function_strings);
@@ -133,25 +133,25 @@ void resize_hashtable(hashtable_t **ht, int hmax, char dictionary_type[B_MAX]) {
             key_value_t *data = (key_value_t *)current->data;
             char *key = (char *)data->key;
             unsigned int key_size = strlen(key) + 1;
-            if (strcmp(dictionary_type, BOOKS) == 0) {
+            if (dictionary_type == BOOKS) {
                 hashtable_t *def_ht = (hashtable_t *)data->value;
                 ht_put(new_ht, data->key, key_size, def_ht, sizeof(hashtable_t),
-                       current->details, BOOKS);
+                       current->details);
                 free(data->key);
                 free(def_ht);
                 free(data);
-            } else if (strcmp(dictionary_type, USERS) == 0) {
+            } else if (dictionary_type == USERS) {
                 char *value = NULL;
                 unsigned int value_size = 0;
                 if (data->value != NULL) {
                     value = (char *)data->value;
                     value_size = strlen(value) + 1;
                     ht_put(new_ht, data->key, key_size, data->value, value_size,
-                       current->details, USERS);
+                       current->details);
                     free(data->value);
                 } else {
                     ht_put(new_ht, data->key, key_size, NULL, 0,
-                       current->details, USERS);
+                       current->details);
                 }
                 free(data->key);
                 free(data);
@@ -159,14 +159,13 @@ void resize_hashtable(hashtable_t **ht, int hmax, char dictionary_type[B_MAX]) {
                 char *value = (char *)data->value;
                 unsigned int value_size = strlen(value) + 1;
                 ht_put(new_ht, data->key, key_size, data->value, value_size,
-                       NULL, DEFINITIONS);
+                       NULL);
                 free(data->key);
                 free(data->value);
                 free(data);
             }
             current = current->next;
-            if (prev->details)
-                free(prev->details);
+            free(prev->details);
             free(prev);
             prev = current;
         }

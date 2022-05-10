@@ -45,15 +45,14 @@ void *ht_get(hashtable_t *ht, void *key);
 
 // function to add (key, value) in ht or replace value if the key was used
 void ht_put(hashtable_t *ht, void *key, unsigned int key_size,
-	        void *value, unsigned int value_size, void *details,
-			char dictionary_type[S]);
+	        void *value, unsigned int value_size, void *details);
 
 // function to free data from a hashtable
-void ht_free(hashtable_t *ht, char dictionary_type[S]);
+void ht_free(hashtable_t *ht, int dictionary_type);
 
 // function to remove (key, value) from hashtable if they exist
 void ht_remove_entry(hashtable_t *ht, void *key,
-					 char dictionary_type[S]);
+					 int dictionary_type);
 
 // function to return details of key in a hashtable
 void *ht_get_details(hashtable_t *ht, void *key);

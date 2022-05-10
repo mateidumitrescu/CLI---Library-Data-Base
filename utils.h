@@ -22,6 +22,6 @@ void day_is_over(hashtable_t *books_ht, hashtable_t *user_ht);
 
 // function to resize a hashtable
 void resize_hashtable(hashtable_t **ht, int hmax,
-                      char dictionary_type[B_MAX]);
+                      int dictionary_type);
 
 #endif  // _HOME_MATEIDUMITRESCU_DOCUMENTS_TEMA2_SD_UTILS_H_

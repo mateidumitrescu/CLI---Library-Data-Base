@@ -16,15 +16,15 @@
 #define KV_MAX 20  // maximum nr of characters in key or value
 #define C_MAX 10  // standard command size
 #define BUF 125
-#define DEFINITIONS "definitions"  // Macros for dictionary types
-#define BOOKS "books"  // Macros for dictionary types
-#define USERS "users"  // Macros for dictionary types
+#define DEFINITIONS 0  // Macros for dictionary types
+#define BOOKS 1  // Macros for dictionary types
+#define USERS 2  // Macros for dictionary types
 
 int main(void) {
     char command[C_MAX], line[BUF], book_name[B_MAX], key_name[KV_MAX],
          value_name[KV_MAX], user_name[U_MAX];
     int go = 1, def_number, borrow_days, days_since_borrowed, rating,
-        hmax_books = 7, hmax_users = 7, hmax_defs = 7;
+        hmax_books = 10, hmax_users = 10, hmax_defs = 10;
     hashtable_t *books_ht = ht_create(hmax_books, hash_function_string,
                                       compare_function_strings);
     hashtable_t *users_ht = ht_create(hmax_users, hash_function_string,

@@ -12,9 +12,9 @@
 
 #define U_MAX 20
 #define B_MAX 40
-#define DEFINITIONS "definitions"  // Macros for dictionary types
-#define BOOKS "books"  // Macros for dictionary types
-#define USERS "users"  // Macros for dictionary types
+#define DEFINITIONS 0  // Macros for dictionary types
+#define BOOKS 1  // Macros for dictionary types
+#define USERS 2  // Macros for dictionary types
 
 void add_user(hashtable_t **users_ht, char user_name[U_MAX]) {
     if (ht_has_key(*users_ht, user_name)) {
@@ -26,7 +26,7 @@ void add_user(hashtable_t **users_ht, char user_name[U_MAX]) {
     user.points = 100;  // every user gets 100 points at registration
     user.banned = 0;
     user.has_borrowed = 0;
-    ht_put(*users_ht, user_name, user_name_size, NULL, 0, &user, USERS);
+    ht_put(*users_ht, user_name, user_name_size, NULL, 0, &user);
     if ((*users_ht)->size > (*users_ht)->hmax) {
         resize_hashtable(users_ht, (*users_ht)->hmax, USERS);
     }
@@ -61,7 +61,7 @@ void borrow_book(hashtable_t *users_ht, hashtable_t *books_ht,
                 book->borrowed = 1;
                 ht_put(users_ht, user_name, strlen(user_name) + 1, book_name,
                        strlen(book_name) + 1,
-                       user, USERS);
+                       user);
             }
         } else {
             printf("The book is not in the library.\n");
@@ -137,7 +137,6 @@ void report_lost(hashtable_t **books_ht, hashtable_t *users_ht,
             printf("The user %s has been banned from this library.\n",
                    user_name);
         }
-        ht_put(users_ht, user_name, strlen(user_name), NULL, 0, user, USERS);
     } else {
         printf("You are not registered yet.\n");
     }

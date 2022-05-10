@@ -12,9 +12,9 @@
 #define B_MAX 40
 #define KV_MAX 20
 #define HMAX 10
-#define DEFINITIONS "definitions"  // Macros for dictionary types
-#define BOOKS "books"  // Macros for dictionary types
-#define USERS "users"  // Macros for dictionary types
+#define DEFINITIONS 0  // Macros for dictionary types
+#define BOOKS 1  // Macros for dictionary types
+#define USERS 2  // Macros for dictionary types
 
 void add_book_in_ht(hashtable_t **books_ht, char book_name[B_MAX],
                     int def_number, int *hmax_books, int *hmax_defs) {
@@ -32,11 +32,11 @@ void add_book_in_ht(hashtable_t **books_ht, char book_name[B_MAX],
         int value_size = strlen(value_name) + 1;
         // adding key and definition in ht
         ht_put(definitions_hashtable, key_name, key_size, value_name,
-               value_size, NULL, DEFINITIONS);
-        if (definitions_hashtable->size > definitions_hashtable->hmax) {
-            resize_hashtable(&definitions_hashtable, *hmax_defs, DEFINITIONS);
-        }
+               value_size, NULL);
         def_number--;
+    }
+    if (definitions_hashtable->size > definitions_hashtable->hmax) {
+        resize_hashtable(&definitions_hashtable, *hmax_defs, DEFINITIONS);
     }
     int book_size = strlen(book_name) + 1;
     book_info_t book_info;
@@ -46,7 +46,7 @@ void add_book_in_ht(hashtable_t **books_ht, char book_name[B_MAX],
     book_info.borrowed = 0;  // setting details at 0 when adding a new book
     ht_put(*books_ht, book_name, book_size, definitions_hashtable,
            sizeof(*definitions_hashtable),
-           &book_info, BOOKS);
+           &book_info);
     if ((*books_ht)->size > (*books_ht)->hmax) {
         resize_hashtable(books_ht, *hmax_books, BOOKS);
     }

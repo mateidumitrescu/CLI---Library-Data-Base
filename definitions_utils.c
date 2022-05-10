@@ -14,9 +14,9 @@
 #define KV_MAX 20
 #define C_MAX 10
 #define BUF 125
-#define DEFINITIONS "definitions"  // Macros for dictionary types
-#define BOOKS "books"  // Macros for dictionary types
-#define USERS "users"  // Macros for dictionary types
+#define DEFINITIONS 0  // Macros for dictionary types
+#define BOOKS 1  // Macros for dictionary types
+#define USERS 2  // Macros for dictionary types
 
 void add_definition(hashtable_t *books_ht, char book_name[B_MAX],
                     char key_name[KV_MAX], char value_name[KV_MAX]) {
@@ -38,7 +38,7 @@ void add_definition(hashtable_t *books_ht, char book_name[B_MAX],
         }
 
         ht_put(definitions_ht, key_name, key_size, value_name,
-               value_size, NULL, DEFINITIONS);
+               value_size, NULL);
         if (definitions_ht->size > definitions_ht->hmax) {
             resize_hashtable(&definitions_ht, definitions_ht->hmax, DEFINITIONS);
         }
@@ -51,9 +51,9 @@ void add_definition(hashtable_t *books_ht, char book_name[B_MAX],
 
 void get_definition(hashtable_t *books_ht, char book_name[B_MAX],
                     char key_name[KV_MAX]) {
-    if (ht_has_key(books_ht, book_name)) {
-        hashtable_t *definitions_ht = (hashtable_t *)ht_get(books_ht,
-                                                            book_name);
+    hashtable_t *definitions_ht = (hashtable_t *)ht_get(books_ht,
+                                                        book_name);
+    if (definitions_ht) {
         char *value_name = (char *)ht_get(definitions_ht, key_name);
         if (value_name) {
             printf("%s\n", value_name); 

@@ -9,9 +9,9 @@
 #include "hashtable_utils.h"
 
 #define S 40
-#define DEFINITIONS "definitions"
-#define BOOKS "books"
-#define USERS "users"
+#define DEFINITIONS 0  // Macros for dictionary types
+#define BOOKS 1  // Macros for dictionary types
+#define USERS 2  // Macros for dictionary types
 
 linked_list_t *ll_create(unsigned int data_size, unsigned int details_size)
 {
@@ -215,8 +215,7 @@ void *ht_get(hashtable_t *ht, void *key) {
 }
 
 void ht_put(hashtable_t *ht, void *key, unsigned int key_size,
-	        void *value, unsigned int value_size, void *details,
-            char dictionary_type[S])
+	        void *value, unsigned int value_size, void *details)
 {
     key_value_t *key_value = ht_get_key_value(ht, key);
     if(key_value) {
@@ -240,20 +239,13 @@ void ht_put(hashtable_t *ht, void *key, unsigned int key_size,
         memcpy(data.value, value, value_size);
     }
 
-    if (strcmp(dictionary_type, BOOKS) == 0) {
-        book_info_t *book_details = (book_info_t *)details;
-        ll_add_nth_node(ht->buckets[id], 0, &data, book_details);
-    } else if (strcmp(dictionary_type, DEFINITIONS) == 0) {
-        ll_add_nth_node(ht->buckets[id], 0, &data, NULL);
-    } else if (strcmp(dictionary_type, USERS) == 0) {
-        user_info_t *user_details = (user_info_t *)details;
-        ll_add_nth_node(ht->buckets[id], 0, &data, user_details);
-    }
+    ll_add_nth_node(ht->buckets[id], 0, &data, details);
+    
 
     ht->size++;
 }
 
-void ht_free(hashtable_t *ht, char dictionary_type[S]) {
+void ht_free(hashtable_t *ht, int dictionary_type) {
     for (unsigned int i = 0; i < ht->hmax; i++) {
 
             ll_node_t *node = ht->buckets[i]->head, *prev;
@@ -262,7 +254,7 @@ void ht_free(hashtable_t *ht, char dictionary_type[S]) {
                 node = node->next;
 
                 key_value_t *data = (key_value_t *)prev->data;
-                if (strcmp(dictionary_type, BOOKS) == 0) {
+                if (dictionary_type == BOOKS) {
                     free(prev->details);
                     free(data->key);
                     hashtable_t *definitions_ht = (hashtable_t *)data->value;
@@ -283,7 +275,7 @@ void ht_free(hashtable_t *ht, char dictionary_type[S]) {
     free(ht);
 }
 
-void  ht_remove_entry(hashtable_t *ht, void *key, char dictionary_type[S])
+void  ht_remove_entry(hashtable_t *ht, void *key, int dictionary_type)
 {
     // no need to check if ht_has_key or if key is null,
     // already did it in call function
@@ -302,15 +294,14 @@ void  ht_remove_entry(hashtable_t *ht, void *key, char dictionary_type[S])
 
     current = ll_remove_nth_node(ht->buckets[id], current_pos);
     data = (key_value_t *)current->data;
-    if (strcmp(dictionary_type, BOOKS) == 0) {
-        // we have to check what type of dictionary we work with
+    if (dictionary_type == BOOKS) {
         hashtable_t *definitions_ht = (hashtable_t *)data->value;
         free(current->details);
         free(data->key);
         ht_free(definitions_ht, DEFINITIONS);
         free(current->data);
         free(current);
-    } else if (strcmp(dictionary_type, DEFINITIONS) == 0) {
+    } else if (dictionary_type == DEFINITIONS) {
         free(data->key);
         free(data->value);
         free(data);
