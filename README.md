@@ -1,7 +1,7 @@
 **Name: Dumitrescu Rares Matei**
 **Group: 311CA**
 
-## Tema 2 - The Library of HashBabel
+## Library Data Base
 
 ### Description:
 
